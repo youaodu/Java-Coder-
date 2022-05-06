@@ -53,7 +53,7 @@ Integer类继承自Number的一个抽象类，和实现了Comparable接口。
 
 ## 常用方法
 
-### parseInt
+### parseInt 方法
 
 ```java
 public static int parseInt(String s) throws NumberFormatException {
@@ -269,4 +269,34 @@ result最终等于-1。最后return。
 return negative ? result : -result;
 ```
 
-由于negative为false所以最后返回的是-result。最后负负得正，返回了一个1。
+由于negative为false所以最后返回的是-result，最后负负得正，返回了一个1。
+
+后面进行第下一次循环，重复尽心刚刚的操作。
+
+### valueOf 方法
+
+在还没有阅读源码时，我以为他就是调用了一下parseInt方法，但是没想到不太一样。
+
+```java
+public static Integer valueOf(String s) throws NumberFormatException {
+    return Integer.valueOf(parseInt(s, 10));
+}
+```
+
+这里先是调用了parseInt方法，把parseInt返回出来的值，传到了valueOf方法中。
+
+parseInt方法在上面已经写过了，接着追valueOf方法。
+
+```java
+public static Integer valueOf(int i) {
+    if (i >= IntegerCache.low && i <= IntegerCache.high)
+        return IntegerCache.cache[i + (-IntegerCache.low)];
+    return new Integer(i);
+}
+```
+
+看这个方法看见了一个没见过的东西，IntegerCache。
+
+这个方法的大概的意思是，当前这个 i 在IntegerCache的范围中，就从Cache中获取，不在的话，就new一个新的。
+
+> 关于IntegerCache在下一篇文章有说到。
